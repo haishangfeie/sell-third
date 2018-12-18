@@ -31,11 +31,26 @@
       <img :src="seller.avatar"
            class="bg">
     </div>
+    <div class="detail">
+      <div class="detail-content-wrap">
+        <div class="detail-content">
+          <h1 class="name">{{seller.name}}</h1>
+          <stars></stars>
+        </div>
+      </div>
+      <div class="close-wrap">
+        <i class="icon-close"></i>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import Stars from '@@/stars/stars'
 export default {
+  components: {
+    Stars
+  },
   props: {
     seller: {
       type: Object,
@@ -58,7 +73,7 @@ export default {
   position: absolute
   top: 0
   left: 0
-  width: 100%
+  right: 0
   background-color: rgba(7, 17, 27, 0.5)
   color: #fff
   .header-top
@@ -117,6 +132,8 @@ export default {
           &.special
             bg-img('special_1')
         .support-text
+          display: inline-block
+          height: 12px
           vertical-align: top
           line-height: 12px
           font-size: 10px
@@ -139,13 +156,14 @@ export default {
         line-height: 12px
         font-size: 10px
   .header-bottom
+    display: flex
     height: 28px
     padding: 0 12px
     font-size: 0
     background-color: rgba(7, 17, 27, 0.2)
-    .bulletin-icon, .bulletin, .icon-keyboard_arrow_right
-      vertical-align: top
+    align-items: center
     .bulletin-icon
+      flex: 0 0 22px
       width: 22px
       height: 12px
       margin-right: 4px
@@ -153,13 +171,19 @@ export default {
       background-repeat: no-repeat
       bg-img('bulletin')
     .bulletin
+      flex: 1
+      height: 12px
       margin-right: 4px
-      line-height: 28px
       font-size: 10px
+      line-height: 12px
       overflow: hidden
       white-space: nowrap
       text-overflow: ellipsis
     .icon-keyboard_arrow_right
+      flex: 0 0 10px
+      width: 10px
+      height: 12px
+      line-height: 12px
       font-size: 10px
   .bg-wrap
     position: absolute
@@ -173,4 +197,29 @@ export default {
       width: 100%
       height: 100%
       filter: blur(10px)
+  .detail
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background: rgba(7, 17, 27, 0.8)
+    backdrop-filter: blur(10px)
+    .detail-content-wrap
+      padding: 64px 0
+      .detail-content
+        .name
+          height: 16px
+          margin-bottom: 16px
+          line-height: 16px
+          font-size: 16px
+          font-weight: 700
+          text-align: center
+    .close-wrap
+      position: relative
+      margin-top: -64px
+      text-align: center
+      .icon-close
+        font-size: 32px
+        color: rgba(255, 255, 255, 0.5)
 </style>

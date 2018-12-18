@@ -32,5 +32,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
+#app
+  width: 100%
+  box-sizing: border-box
 </style>
