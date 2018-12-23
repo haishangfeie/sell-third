@@ -9,20 +9,20 @@
           <span class="name">{{seller.name}}</span>
         </h1>
         <p class="desc">{{seller.description}}/{{seller.deliveryTime}}分钟送达</p>
-        <div class="support"
-             v-if="seller.supports && seller.supports.length">
-          <i class="support-icon"
-             :class="mapSupportType[seller.supports[0].type]"></i>
-          <span class="support-text">{{seller.supports[0].description}}</span>
-        </div>
+        <support-row v-if="seller.supports && seller.supports.length"
+                     :size="1"
+                     :type="seller.supports[0].type"
+                     :desc="seller.supports[0].description"></support-row>
       </div>
       <div v-if="seller.supports && seller.supports.length"
-           class="support-count">
+           class="support-count"
+           @click="controlDetail(true)">
         <span class="count">{{seller.supports.length}}个</span>
         <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
-    <div class="header-bottom">
+    <div class="header-bottom"
+         @click="controlDetail(true)">
       <i class="bulletin-icon"></i>
       <span class="bulletin">{{seller.bulletin}}</span>
       <i class="icon-keyboard_arrow_right"></i>
@@ -31,25 +31,52 @@
       <img :src="seller.avatar"
            class="bg">
     </div>
-    <div class="detail">
-      <div class="detail-content-wrap">
-        <div class="detail-content">
-          <h1 class="name">{{seller.name}}</h1>
-          <stars></stars>
+    <transition name="fade">
+      <div class="detail"
+           v-if="isShowDetail">
+        <div class="detail-content-wrap">
+          <div class="detail-content">
+            <h1 class="name">{{seller.name}}</h1>
+            <div v-if="seller.score"
+                 class="star-wrap">
+              <stars :size="40"
+                     :score="seller.score"></stars>
+            </div>
+            <div class="block">
+              <titleLine title="优惠信息"></titleLine>
+              <div class="support-wrap"
+                   v-for="(support,index) in seller.supports"
+                   :key="index">
+                <support-row :size="2"
+                             :type="support.type"
+                             :desc="support.description"></support-row>
+              </div>
+            </div>
+            <div class="block">
+              <titleLine title="商家公告"></titleLine>
+              <p class="bulletin">{{seller.bulletin}}</p>
+            </div>
+
+          </div>
+        </div>
+        <div class="close-wrap">
+          <i class="icon-close"
+             @click="controlDetail(false)"></i>
         </div>
       </div>
-      <div class="close-wrap">
-        <i class="icon-close"></i>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import Stars from '@@/stars/stars'
+import SupportRow from '@@/support-row/support-row'
+import TitleLine from '@@/title-line/title-line'
 export default {
   components: {
-    Stars
+    Stars,
+    SupportRow,
+    TitleLine
   },
   props: {
     seller: {
@@ -61,7 +88,12 @@ export default {
   },
   data () {
     return {
-      mapSupportType: ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+      isShowDetail: false
+    }
+  },
+  methods: {
+    controlDetail (flag) {
+      this.isShowDetail = flag
     }
   }
 }
@@ -111,32 +143,6 @@ export default {
         margin-bottom: 10px
         line-height: 12px
         font-size: 12px
-      .support
-        font-size: 0
-        .support-icon
-          display: inline-block
-          width: 12px
-          height: 12px
-          margin-right: 4px
-          border-radius: 2px
-          background-size: 12px 12px
-          background-repeat: no-repeat
-          &.decrease
-            bg-img('decrease_1')
-          &.discount
-            bg-img('discount_1')
-          &.guarantee
-            bg-img('guarantee_1')
-          &.invoice
-            bg-img('invoice_1')
-          &.special
-            bg-img('special_1')
-        .support-text
-          display: inline-block
-          height: 12px
-          vertical-align: top
-          line-height: 12px
-          font-size: 10px
     .support-count
       position: absolute
       bottom: 15px
@@ -205,8 +211,12 @@ export default {
     height: 100%
     background: rgba(7, 17, 27, 0.8)
     backdrop-filter: blur(10px)
+    overflow: auto
+    transition opacity .4s
+    &.fade-enter,&.fade-leave-active
+      opacity 0
     .detail-content-wrap
-      padding: 64px 0
+      padding: 64px 10%
       .detail-content
         .name
           height: 16px
@@ -215,6 +225,17 @@ export default {
           font-size: 16px
           font-weight: 700
           text-align: center
+        .star-wrap
+          font-size: 0
+          padding: 2px 0
+          text-align: center
+        .block
+          .support-wrap
+            margin-bottom: 12px
+          .bulletin
+            padding: 0 12px
+            line-height: 24px
+            font-size: 12px
     .close-wrap
       position: relative
       margin-top: -64px
