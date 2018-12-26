@@ -212,9 +212,10 @@ export default {
     background: rgba(7, 17, 27, 0.8)
     backdrop-filter: blur(10px)
     overflow: auto
-    transition opacity .4s
-    &.fade-enter,&.fade-leave-active
-      opacity 0
+    transition: opacity 0.4s
+    z-index: 100
+    &.fade-enter, &.fade-leave-active
+      opacity: 0
     .detail-content-wrap
       padding: 64px 10%
       .detail-content
