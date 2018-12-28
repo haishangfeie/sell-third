@@ -89,10 +89,10 @@ export default {
       })
       this.goodsRightScroll = new BScroll(this.$refs.goodsRight, {
         click: true,
-        probeType: 2
+        probeType: 3
       })
       this.goodsRightScroll.on('scroll', (pos) => {
-        let posY = -pos.y
+        let posY = Math.floor(-pos.y)
         let heightArr = this.goodsRightListHeightArr
         if (posY < heightArr[0]) {
           this.currentSelIndex = 0
@@ -159,7 +159,7 @@ export default {
         position: relative
         margin-top: -1px
         z-index: 1
-        background-color: pink
+        background-color: #fff
         .inner
           border-1px-none()
       .inner
