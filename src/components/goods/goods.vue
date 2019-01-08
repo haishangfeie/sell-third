@@ -1,67 +1,85 @@
 <template>
-  <div class="goods">
-    <div class="goods-left"
-         ref="goodsLeft">
-      <ul>
-        <li class="goods-left-item hook-goods-left-item"
-            v-for="(good,index) in goods"
-            :key="index"
-            :class="{active:currentSelIndex===index}"
-            @click="toThisGoodList(index)">
-          <div class="inner">
-            <i v-if="good.type !==-1"
-               class="icon"
-               :class="mapSupportType[good.type]"></i>
-            <span class="name">{{good.name}}</span>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="goods-right"
-         ref="goodsRight">
-      <ul>
-        <li v-for="(good,index) in goods"
-            :key="index"
-            class="good hook-good">
-          <h2 class="good-title">{{good.name}}</h2>
-          <ul>
-            <li class="food"
-                v-for="(food,index) in good.foods"
-                :key="index">
-              <img class="icon"
-                   :src="food.icon"
-                   alt="">
-              <div class="content">
-                <h3 class="food-name">{{food.name}}</h3>
-                <p class="desc">{{food.description}}</p>
-                <div class="extr">
-                  <span class="sell">月售{{food.sellCount}}份</span>
-                  <span class="rating">好评率{{food.rating}}%</span>
+  <div>
+    <div class="goods">
+      <div class="goods-left"
+           ref="goodsLeft">
+        <ul>
+          <li class="goods-left-item hook-goods-left-item"
+              v-for="(good,index) in goods"
+              :key="index"
+              :class="{active:currentSelIndex===index}"
+              @click="toThisGoodList(index)">
+            <div class="inner">
+              <i v-if="good.type !==-1"
+                 class="icon"
+                 :class="mapSupportType[good.type]"></i>
+              <span class="name">{{good.name}}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="goods-right"
+           ref="goodsRight">
+        <ul>
+          <li v-for="(good,index) in goods"
+              :key="index"
+              class="good hook-good">
+            <h2 class="good-title">{{good.name}}</h2>
+            <ul>
+              <li class="food"
+                  v-for="(food,index) in good.foods"
+                  :key="index">
+                <img class="icon"
+                     :src="food.icon"
+                     alt="">
+                <div class="content">
+                  <h3 class="food-name">{{food.name}}</h3>
+                  <p class="desc">{{food.description}}</p>
+                  <div class="extr">
+                    <span class="sell">月售{{food.sellCount}}份</span>
+                    <span class="rating">好评率{{food.rating}}%</span>
+                  </div>
+                  <div class="price-wrap">
+                    <span class="price">
+                      <span class="price-yuan">￥</span>
+                      <span class="price-num">{{food.price}}</span>
+                    </span>
+                    <span v-if="food.oldPrice"
+                          class="old-price">
+                      <span class="old-price-yuan">￥</span>
+                      <span class="old-price-num">{{food.oldPrice}}</span>
+                    </span>
+                  </div>
+                  <div class="shop-controller-wrapper">
+                    <shop-controller :food="food"></shop-controller>
+                  </div>
                 </div>
-                <div class="price-wrap">
-                  <span class="price">
-                    <span class="price-yuan">￥</span>
-                    <span class="price-num">{{food.price}}</span>
-                  </span>
-                  <span v-if="food.oldPrice"
-                        class="old-price">
-                    <span class="old-price-yuan">￥</span>
-                    <span class="old-price-num">{{food.oldPrice}}</span>
-                  </span>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </li>
-      </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
+    <shopcart :goods="goods"
+              :seller="seller"></shopcart>
   </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
+import Shopcart from '@@/shopcart/shopcart'
+import ShopController from '@@/shop-controller/shop-controller'
 const NoError = 0
 export default {
+  props: {
+    seller: {
+      type: Object
+    }
+  },
+  components: {
+    Shopcart,
+    ShopController
+  },
   data () {
     return {
       goods: [],
@@ -107,9 +125,6 @@ export default {
           }
         }
         this.goodsLeftScroll.scrollToElement(this.$refs.goodsLeft.getElementsByClassName('hook-goods-left-item')[this.currentSelIndex], 200)
-        // this.currentSelIndex = this.goodsRightListHeightArr.findIndex((height,index,arr)=>{
-        //   if(){}
-        // })
       })
     },
     calcGoodsRightHeight () {
@@ -208,6 +223,7 @@ export default {
           height: 57px
           margin-right: 10px
         .content
+          position: relative
           flex: 1
           padding-top: 2px
           .food-name
@@ -247,4 +263,8 @@ export default {
                 font-size: 10px
               .old-price-num
                 font-weight: 700
+          .shop-controller-wrapper
+            position: absolute
+            bottom: -6px
+            right: -6px
 </style>
