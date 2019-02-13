@@ -59,6 +59,19 @@ export default {
   .star
     display: inline-block
     background-repeat: no-repeat
+    &.size_20
+      width: 10px
+      height: 10px
+      margin-right: 4px
+      background-size: 10px 10px
+      &:last-of-type
+        margin-right: 0
+      &.on
+        bg-img('star24_on')
+      &.half
+        bg-img('star24_half')
+      &.off
+        bg-img('star24_off')
     &.size_30
       width: 15px
       height: 15px

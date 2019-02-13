@@ -28,7 +28,8 @@
             <ul>
               <li class="food"
                   v-for="(food,index) in good.foods"
-                  :key="index">
+                  :key="index"
+                  @click="showFoodDetail(food)">
                 <img class="icon"
                      :src="food.icon"
                      alt="">
@@ -60,6 +61,13 @@
         </ul>
       </div>
     </div>
+    <transition name="move">
+      <div  v-if="isShowDetail" class="food-wrap">
+        <food
+              :food="foodDetail"
+              @hide-food-detail="hideFoodDetaiil"></food>
+      </div>
+    </transition>
     <shopcart :goods="goods"
               :seller="seller"></shopcart>
   </div>
@@ -69,6 +77,7 @@
 import BScroll from 'better-scroll'
 import Shopcart from '@@/shopcart/shopcart'
 import ShopController from '@@/shop-controller/shop-controller'
+import food from '@@/food/food'
 const NoError = 0
 export default {
   props: {
@@ -78,14 +87,17 @@ export default {
   },
   components: {
     Shopcart,
-    ShopController
+    ShopController,
+    food
   },
   data () {
     return {
       goods: [],
       mapSupportType: ['decrease', 'discount', 'special', 'invoice', 'guarantee'],
       currentSelIndex: 0,
-      goodsRightListHeightArr: []
+      goodsRightListHeightArr: [],
+      isShowDetail: false,
+      foodDetail: {}
     }
   },
 
@@ -145,6 +157,14 @@ export default {
     toThisGoodList (index) {
       this.currentSelIndex = index
       this.goodsRightScroll.scrollToElement(this.$refs.goodsRight.getElementsByClassName('hook-good')[index], 200)
+    },
+    showFoodDetail (food) {
+      this.isShowDetail = true
+      this.foodDetail = food
+    },
+    hideFoodDetaiil () {
+      this.isShowDetail = false
+      this.foodDetail = {}
     }
   }
 }
@@ -267,4 +287,13 @@ export default {
             position: absolute
             bottom: -6px
             right: -6px
+.food-wrap
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  transition transform .4s;
+  &.move-enter,&.move-leave-active
+    transform translate3d(100%,0,0)
 </style>

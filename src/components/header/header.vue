@@ -213,7 +213,7 @@ export default {
     backdrop-filter: blur(10px)
     overflow: auto
     transition: opacity 0.4s
-    z-index: 100
+    z-index: 300
     &.fade-enter, &.fade-leave-active
       opacity: 0
     .detail-content-wrap

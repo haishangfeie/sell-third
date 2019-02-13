@@ -4,13 +4,13 @@
       <div v-show="food.count"
            class="reduce">
         <i class="inner icon-remove_circle_outline"
-           @click="reduceCount"></i>
+           @click.stop="reduceCount"></i>
       </div>
     </transition>
     <span v-show="food.count"
           class="num">{{this.food.count}}</span>
     <i class="add icon-add_circle"
-       @click="addCount"></i>
+       @click.stop="addCount"></i>
   </div>
 </template>
 
